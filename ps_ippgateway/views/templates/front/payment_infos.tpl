@@ -42,7 +42,7 @@
     }
   </script>
       <h1>Payment Details</h1>
-      <script src="https://pay.ippeurope.com/pay_new.js?checkoutId={$checkoutId}&cryptogram={$cryptogram}"></script>
+      <script src="https://pay.ippeurope.com/pay.js?checkoutId={$checkoutId}&cryptogram={$cryptogram}"></script>
       <form role="form" action="#" id="ippgateway-card-payment" class="ippgateway-payment-form paymentWidgets" data-brands="VISA MASTER" data-theme="divs" method="post">
       </form>
 </section>
