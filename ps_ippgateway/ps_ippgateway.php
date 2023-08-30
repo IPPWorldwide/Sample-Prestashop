@@ -41,10 +41,10 @@ class Ps_IppGateway extends PaymentModule
 
     public function __construct()
     {
-        $this->name = 'ps_ippgateway';
+        $this->name = '{{PlaceHolder-PartnerFolder}}';
         $this->tab = 'payments_gateways';
         $this->version = '2.0.5';
-        $this->author = 'PrestaShop';
+        $this->author = '{{PlaceHolder-PartnerName}}';
         $this->controllers = ['payment', 'validation'];
 
         $this->currencies = true;
@@ -61,7 +61,7 @@ class Ps_IppGateway extends PaymentModule
         $this->bootstrap = true;
         parent::__construct();
 
-        $this->displayName = $this->trans('Payments by VISA og MasterCard', [], 'Modules.PsIppGateway.Admin');
+        $this->displayName = $this->trans('{{PlaceHolder-PartnerName}} - Payments by VISA og MasterCard', [], 'Modules.PsIppGateway.Admin');
         $this->description = $this->trans('This module allows you to accept payments by VISA og MasterCard.', [], 'Modules.PsIppGateway.Admin');
         $this->confirmUninstall = $this->trans('Are you sure you want to delete these details?', [], 'Modules.PsIppGateway.Admin');
         $this->ps_versions_compliancy = ['min' => '1.7.1.0', 'max' => _PS_VERSION_];
@@ -178,7 +178,7 @@ class Ps_IppGateway extends PaymentModule
         $newOption->setModuleName($this->name)
                 ->setCallToActionText($this->trans('Pay by VISA or MasterCard', [], 'Modules.PsIppGateway.Admin'))
                 ->setAction($this->context->link->getModuleLink($this->name, 'validation', [], true))
-                ->setAdditionalInformation($this->fetch('module:ps_ippgateway/views/templates/front/payment_infos.tpl'));
+                ->setAdditionalInformation($this->fetch('module:{{PlaceHolder-PartnerFolder}}/views/templates/front/payment_infos.tpl'));
 
         return [$newOption];
     }
@@ -211,7 +211,7 @@ class Ps_IppGateway extends PaymentModule
             $this->smarty->assign('status', 'failed');
         }
 
-        return $this->fetch('module:ps_ippgateway/views/templates/hook/payment_return.tpl');
+        return $this->fetch('module:{{PlaceHolder-PartnerFolder}}/views/templates/hook/payment_return.tpl');
     }
 
     public function checkCurrency($cart)
