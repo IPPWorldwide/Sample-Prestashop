@@ -19,15 +19,10 @@
  */
 
 /**
- * This Controller receive customer after approval on bank payment page
+ * This Controller simulate an external payment gateway
  */
-class PaymentExampleValidationModuleFrontController extends ModuleFrontController
+class PaymentExampleExternalModuleFrontController extends ModuleFrontController
 {
-    /**
-     * @var PaymentModule
-     */
-    public $module;
-
     /**
      * {@inheritdoc}
      */
@@ -56,32 +51,20 @@ class PaymentExampleValidationModuleFrontController extends ModuleFrontControlle
                 ]
             ));
         }
+    }
 
-        $this->module->validateOrder(
-            (int) $this->context->cart->id,
-            (int) $this->getOrderState(),
-            (float) $this->context->cart->getOrderTotal(true, Cart::BOTH),
-            $this->getOptionName(),
-            null,
-            [
-                'transaction_id' => Tools::passwdGen(), // Should be retrieved from your Payment response
-            ],
-            (int) $this->context->currency->id,
-            false,
-            $customer->secure_key
-        );
+    /**
+     * {@inheritdoc}
+     */
+    public function initContent()
+    {
+        parent::initContent();
 
-        Tools::redirect($this->context->link->getPageLink(
-            'order-confirmation',
-            true,
-            (int) $this->context->language->id,
-            [
-                'id_cart' => (int) $this->context->cart->id,
-                'id_module' => (int) $this->module->id,
-                'id_order' => (int) $this->module->currentOrder,
-                'key' => $customer->secure_key,
-            ]
-        ));
+        $this->context->smarty->assign([
+            'action' => $this->context->link->getModuleLink($this->module->name, 'validation', ['option' => 'external'], true),
+        ]);
+
+        $this->setTemplate('module:paymentexample/views/templates/front/external.tpl');
     }
 
     /**
@@ -105,6 +88,10 @@ class PaymentExampleValidationModuleFrontController extends ModuleFrontControlle
      */
     private function checkIfPaymentOptionIsAvailable()
     {
+        if (!Configuration::get(PaymentExample::CONFIG_PO_EXTERNAL_ENABLED)) {
+            return false;
+        }
+
         $modules = Module::getPaymentModules();
 
         if (empty($modules)) {
@@ -118,63 +105,5 @@ class PaymentExampleValidationModuleFrontController extends ModuleFrontControlle
         }
 
         return false;
-    }
-
-    /**
-     * Get OrderState identifier
-     *
-     * @return int
-     */
-    private function getOrderState()
-    {
-        $option = Tools::getValue('option');
-        $orderStateId = (int) Configuration::get('PS_OS_ERROR');
-
-        switch ($option) {
-            case 'offline':
-                $orderStateId = (int) Configuration::get(PaymentExample::CONFIG_OS_OFFLINE);
-                break;
-            case 'external':
-                $orderStateId = (int) Configuration::get('PS_OS_WS_PAYMENT');
-                break;
-            case 'iframe':
-            case 'embedded':
-            case 'binary':
-                $orderStateId = (int) Configuration::get('PS_OS_PAYMENT');
-                break;
-        }
-
-        return $orderStateId;
-    }
-
-    /**
-     * Get translated Payment Option name
-     *
-     * @return string
-     */
-    private function getOptionName()
-    {
-        $option = Tools::getValue('option');
-        $name = $this->module->displayName;
-
-        switch ($option) {
-            case 'offline':
-                $name = $this->l('Offline');
-                break;
-            case 'external':
-                $name = $this->l('External');
-                break;
-            case 'iframe':
-                $name = $this->l('Iframe');
-                break;
-            case 'embedded':
-                $name = $this->l('Embedded');
-                break;
-            case 'binary':
-                $name = $this->l('Binary');
-                break;
-        }
-
-        return $name;
     }
 }
