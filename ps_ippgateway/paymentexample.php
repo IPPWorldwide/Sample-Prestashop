@@ -26,12 +26,12 @@ if (!defined('_PS_VERSION_')) {
 
 class PaymentExample extends PaymentModule
 {
-    const CONFIG_OS_OFFLINE = 'PAYMENTEXAMPLE_OS_OFFLINE';
+    const CONFIG_OS_OFFLINE = 'OS_OFFLINE';
     const CONFIG_PO_OFFLINE_ENABLED = 'PAYMENTEXAMPLE_PO_OFFLINE_ENABLED';
     const CONFIG_PO_EXTERNAL_ENABLED = 'PAYMENTEXAMPLE_PO_EXTERNAL_ENABLED';
     const CONFIG_PO_EMBEDDED_ENABLED = 'PAYMENTEXAMPLE_PO_EMBEDDED_ENABLED';
     const CONFIG_PO_BINARY_ENABLED = 'PAYMENTEXAMPLE_PO_BINARY_ENABLED';
-    const MODULE_ADMIN_CONTROLLER = 'AdminConfigurePaymentExample';
+    const MODULE_ADMIN_CONTROLLER = 'AdminConfigurePayment';
     const HOOKS = [
         'actionPaymentCCAdd',
         'actionObjectShopAddAfter',
